@@ -29,7 +29,7 @@ if __name__ == "__main__":
 
     if args.push:
         current_date = datetime.datetime.today().strftime('%Y-%m-%d')
-        git_hash = subprocess.check_output(['git','rev-parse','HEAD']).decode().strip()
+        git_hash = check_output(['git','rev-parse','HEAD']).decode().strip()
         cmd = f"gcloud docker -- push {docker_path}{args.image}:{args.version}"
         with open('./docker.log','a') as o:o.write(' '.join([current_date,git_hash,cmd]) + '\n')
         call(shlex.split(cmd))

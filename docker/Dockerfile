@@ -54,8 +54,8 @@ RUN mkdir plink2 && cd plink2 && curl -O s3.amazonaws.com/plink2-assets/plink2_l
     curl -O http://s3.amazonaws.com/plink2-assets/plink2_linux_avx2_latest.zip && \
     unzip plink2_linux_avx2_latest.zip && mv plink2 /usr/local/bin && cd .. && rm -rf plink2
 
-ADD install_packages.R /usr/local/bin/
-ADD requirements.txt .
+ADD ./docker/install_packages.R /usr/local/bin/
+ADD ./docker/requirements.txt .
 
 
 RUN chmod a+x /usr/local/bin/install_packages.R && \
@@ -65,4 +65,4 @@ RUN pip3 install -r requirements.txt && rm requirements.txt
 
 RUN apt-get remove mercurial default-jre --yes && apt autoremove --yes && apt-get clean
 
-ADD scripts ..scripts
+ADD scripts ../scripts
