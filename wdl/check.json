@@ -1,5 +1,6 @@
 {
   "prs_check.check.variantset2": "full",
+  "prs_check.check.label": "test",
   "prs_check.docker": "eu.gcr.io/finngen-refinery-dev/check_prs:test",
   "prs_check.check.variantset1": "hm3",
   "prs_check.check.scores": "gs://r4_data/prs/test/results.txt",
@@ -7,4 +8,3 @@
   "prs_check.check.phenofile": "gs://r4_data/pheno/R4_COV_PHENO_V1.txt.gz",
   "prs_check.check.pheno": "HYPOTHYROIDISM"
 }
-
