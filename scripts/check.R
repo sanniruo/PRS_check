@@ -48,7 +48,7 @@ phenoFile <- opt$phenoFile
 phenotype <- opt$phenotype
 variantSet1 <-opt$variantSet1
 variantSet2 <-opt$variantSet2
-label<-ifelse(opt$label == "", opt$label, paste0(opt$label, "_"))
+label<-ifelse(label == "", opt$label, paste0(opet$label, "_"))
 covariates <- strsplit(opt$covarColList,",")[[1]]
 
 ## Read in first file
@@ -87,50 +87,6 @@ caus_numr<-as.numeric(causals)
 causals<-causals[order(caus_numr)]
 caus_numr<-caus_numr[order(caus_numr)]
 
-## Calculate auc:
-## Read in phenotype file:
-cmd = paste0("pheno<-fread('zcat ",phenoFile,"')")
-eval(parse(text=cmd))
-names(dat)[1]<-"FINNGENID"
-list_of_phenotypes<-c("FINNGENID", phenotype, covariates)
-pheno<-select(pheno, list_of_phenotypes)
-dat<-left_join(dat, pheno)
-
-covariatesONE<-c()
-for(i in 1:length(covariates)){
-  covariatesONE = paste0(covariatesONE, paste0("+",covariates[i]))
-}
-
-aucs_variantset1<-c()
-for(i in 1:length(caus_numr)){
-  cmd = paste0("logit<-glm(",phenotype,"~varset1_GRS_p",caus_numr[i],"",covariatesONE,", data = dat, family = 'binomial')")
-  eval(parse(text=cmd))
-  aucs_variantset1[i]<-auc(logit)
-}
-
-aucs_variantset2<-c()
-for(i in 1:length(caus_numr)){
-  cmd = paste0("logit<-glm(dat$",phenotype,"~dat$varset2_GRS_p",caus_numr[i],"",covariatesONE,", data = dat, family = 'binomial')")
-  eval(parse(text=cmd))
-  aucs_variantset2[i]<-auc(logit)
-}
-cmd = paste0("logit_baseline<-glm(dat$",phenotype,"~",covariatesONE,", data = dat, family = 'binomial')")
-eval(parse(text=cmd))
-auc_baseline<-auc(logit_baseline)
-
-auc_plot_min<-min(auc_baseline, aucs_variantset1, aucs_variantset2)
-auc_plot_max<-max(auc_baseline, aucs_variantset1, aucs_variantset2)
-
-## AUC plot
-cmd = paste0("pdf('",output,"/AUC_plot_",label,"",phenotype,".pdf', 12, 10)")
-eval(parse(text=cmd))
-plot(aucs_variantset1, type = "b", ylim = c(auc_plot_min-0.01*auc_plot_min, auc_plot_max+0.01*auc_plot_max), xaxt = "n", xlab = "Causal fraction", ylab = "Are Under Curve (AUC)", col = "cornflowerblue", lwd = 2)
-lines(aucs_variantset2, type = "b", col = "tomato", lwd = 2)
-abline(h = auc_baseline, col = "red", lty = 2)
-axis(1, at = 1:length(causals), labels = caus_numr)
-cmd =paste0("legend('topleft', legend = c('",variantSet1,"', '",variantSet2,"'), col = c('cornflowerblue', 'tomato'), lty = 1, lwd = 2)")
-eval(parse(text=cmd))
-dev.off()
 
 ## Scatter plots:
 correlations<-c()
@@ -156,3 +112,52 @@ eval(parse(text=cmd))
 plot(1:length(caus_numr), correlations, ylab = "Correlation", xlab = "Causal fraction", type = "b", xaxt = 'n')
 axis(at= 1:length(caus_numr), side = 1, labels =caus_numr)
 dev.off()
+
+## Calculate auc:
+## Read in phenotype file:
+cmd = paste0("pheno<-fread('zcat ",phenoFile,"')")
+eval(parse(text=cmd))
+names(dat)[1]<-"FINNGENID"
+if(phenotype%in%names(pheno)){
+  list_of_phenotypes<-c("FINNGENID", phenotype, covariates)
+  pheno<-select(pheno, list_of_phenotypes)
+  dat<-left_join(dat, pheno)
+  
+  covariatesONE<-c()
+  for(i in 1:length(covariates)){
+    covariatesONE = paste0(covariatesONE, paste0("+",covariates[i]))
+  }
+  
+  aucs_variantset1<-c()
+  for(i in 1:length(caus_numr)){
+    cmd = paste0("logit<-glm(",phenotype,"~varset1_GRS_p",caus_numr[i],"",covariatesONE,", data = dat, family = 'binomial')")
+    eval(parse(text=cmd))
+    aucs_variantset1[i]<-auc(logit)
+  }
+  
+  aucs_variantset2<-c()
+  for(i in 1:length(caus_numr)){
+    cmd = paste0("logit<-glm(dat$",phenotype,"~dat$varset2_GRS_p",caus_numr[i],"",covariatesONE,", data = dat, family = 'binomial')")
+    eval(parse(text=cmd))
+    aucs_variantset2[i]<-auc(logit)
+  }
+  cmd = paste0("logit_baseline<-glm(dat$",phenotype,"~",covariatesONE,", data = dat, family = 'binomial')")
+  eval(parse(text=cmd))
+  auc_baseline<-auc(logit_baseline)
+  
+  auc_plot_min<-min(auc_baseline, aucs_variantset1, aucs_variantset2)
+  auc_plot_max<-max(auc_baseline, aucs_variantset1, aucs_variantset2)
+  
+  ## AUC plot
+  cmd = paste0("pdf('",output,"/AUC_plot_",label,"",phenotype,".pdf', 12, 10)")
+  eval(parse(text=cmd))
+  plot(aucs_variantset1, type = "b", ylim = c(auc_plot_min-0.01*auc_plot_min, auc_plot_max+0.01*auc_plot_max), xaxt = "n", xlab = "Causal fraction", ylab = "Are Under Curve (AUC)", col = "cornflowerblue", lwd = 2)
+  lines(aucs_variantset2, type = "b", col = "tomato", lwd = 2)
+  abline(h = auc_baseline, col = "red", lty = 2)
+  axis(1, at = 1:length(causals), labels = caus_numr)
+  cmd =paste0("legend('topleft', legend = c('",variantSet1,"', '",variantSet2,"'), col = c('cornflowerblue', 'tomato'), lty = 1, lwd = 2)")
+  eval(parse(text=cmd))
+  dev.off()
+  
+}
+else{print("Phenotype missing. No AUC plot.")}
