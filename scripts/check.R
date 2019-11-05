@@ -48,7 +48,7 @@ phenoFile <- opt$phenoFile
 phenotype <- opt$phenotype
 variantSet1 <-opt$variantSet1
 variantSet2 <-opt$variantSet2
-label<-paste0(opt$label, "_")
+label<-ifelse(label == "", opt$label, paste0(opet$label, "_"))
 covariates <- strsplit(opt$covarColList,",")[[1]]
 
 ## Read in first file
