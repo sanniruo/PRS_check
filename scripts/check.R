@@ -160,4 +160,4 @@ if(phenotype%in%names(pheno)){
   dev.off()
   
 }
-else{print("Phenotype missing. No AUC plot.")}
+
