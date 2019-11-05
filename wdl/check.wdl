@@ -17,7 +17,7 @@ task check {
 
 	File scores
 	Array[Array[File]] score_list=read_tsv(scores)
-	Int score_size = ceil(size(score_list[0],"GB"))*10
+	Int score_size = ceil(size(score_list[0][0],"GB"))*10
 
 	Int disk_size = pheno_size + score_size +1
 	String? variantset1
