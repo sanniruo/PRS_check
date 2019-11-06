@@ -50,7 +50,7 @@ variantSet1 <-opt$variantSet1
 variantSet2 <-opt$variantSet2
 label<-ifelse(opt$label == "", opt$label, paste0(opt$label, "_"))
 covariates <- strsplit(opt$covarColList,",")[[1]]
-
+title = paste0(label, pheno)
 ## Read in first file
 d<-fread(fileList, header = F)
 
@@ -100,7 +100,7 @@ for(i in 1:length(caus_numr)){
   main = paste0("Causal fraction = ",caus_numr[i],", correlation = ", corr,"")
   cmd=paste0("pdf('",output,"/PRS_comparison_",label,"",phenotype,"_p",caus_numr[i],".pdf',10, 10)")
   eval(parse(text=cmd))
-  cmd = paste0("plot(dat$varset1_GRS_p",caus_numr[i],", dat$varset2_GRS_p",caus_numr[i],", xlab = '",variantSet1,"', ylab = '",variantSet2,"', ylim =c(min, max), xlim =c(min, max), pch = 16, main = main)")
+  cmd = paste0("plot(dat$varset1_GRS_p",caus_numr[i],", dat$varset2_GRS_p",caus_numr[i],", xlab = '",variantSet1,"', ylab = '",variantSet2,"', ylim =c(min, max), xlim =c(min, max), main = title, pch = 16, main = main)")
   eval(parse(text=cmd))
   abline(0,1)
   dev.off()
@@ -109,7 +109,7 @@ for(i in 1:length(caus_numr)){
 
 cmd = paste0("pdf('",output,"/Correlation_vs_causal_fractions_",label,"",phenotype,".pdf', 10, 10)")
 eval(parse(text=cmd))
-plot(1:length(caus_numr), correlations, ylab = "Correlation", xlab = "Causal fraction", type = "b", xaxt = 'n')
+plot(1:length(caus_numr), correlations, ylab = "Correlation", xlab = "Causal fraction", main = title, type = "b", xaxt = 'n')
 axis(at= 1:length(caus_numr), side = 1, labels =caus_numr)
 dev.off()
 
@@ -151,7 +151,7 @@ if(phenotype%in%names(pheno)){
   ## AUC plot
   cmd = paste0("pdf('",output,"/AUC_plot_",label,"",phenotype,".pdf', 12, 10)")
   eval(parse(text=cmd))
-  plot(aucs_variantset1, type = "b", ylim = c(auc_plot_min-0.01*auc_plot_min, auc_plot_max+0.01*auc_plot_max), xaxt = "n", xlab = "Causal fraction", ylab = "Are Under Curve (AUC)", col = "cornflowerblue", lwd = 2)
+  plot(aucs_variantset1, type = "b", ylim = c(auc_plot_min-0.01*auc_plot_min, auc_plot_max+0.01*auc_plot_max), xaxt = "n", main = title, xlab = "Causal fraction", ylab = "Are Under Curve (AUC)", col = "cornflowerblue", lwd = 2)
   lines(aucs_variantset2, type = "b", col = "tomato", lwd = 2)
   abline(h = auc_baseline, col = "red", lty = 2)
   axis(1, at = 1:length(causals), labels = caus_numr)
