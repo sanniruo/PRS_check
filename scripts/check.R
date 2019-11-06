@@ -57,7 +57,7 @@ d<-fread(fileList, header = F)
 causals<-c()
 for(i in 1:nrow(d)){
   data1<-fread(d$V1[i])
-  causal_new<-ifelse(grepl("inf", d$V1[i]), gsub(".*-\\s*|.txt.*", "", d$V1[i]), gsub(".*p\\s*|.txt.*", "", d$V1[i]))
+  causal_new<-ifelse(grepl("-inf", d$V1[i]), gsub(".*-\\s*|.txt.*", "", d$V1[i]), gsub(".*p\\s*|.txt.*", "", d$V1[i]))
   causals<-cbind(causals, c(causal_new))
   causal_new<-as.numeric(causal_new)
   cmd = paste0("data1$varset1_GRS_p",causal_new,"<-data1$SCORE1_AVG*data1$NMISS_ALLELE_CT")
