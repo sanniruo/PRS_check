@@ -100,7 +100,7 @@ for(i in 1:length(caus_numr)){
   main = paste0("Causal fraction = ",caus_numr[i],", correlation = ", corr,"")
   cmd=paste0("pdf('",output,"/PRS_comparison_",label,"",phenotype,"_p",caus_numr[i],".pdf',10, 10)")
   eval(parse(text=cmd))
-  cmd = paste0("plot(dat$varset1_GRS_p",caus_numr[i],", dat$varset2_GRS_p",caus_numr[i],", xlab = '",variantSet1,"', ylab = '",variantSet2,"', ylim =c(min, max), xlim =c(min, max), main = title, pch = 16, main = main)")
+  cmd = paste0("plot(dat$varset1_GRS_p",caus_numr[i],", dat$varset2_GRS_p",caus_numr[i],", xlab = '",variantSet1,"', ylab = '",variantSet2,"', ylim =c(min, max), xlim =c(min, max),pch = 16, main = main)")
   eval(parse(text=cmd))
   abline(0,1)
   dev.off()
