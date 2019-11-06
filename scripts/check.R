@@ -50,7 +50,7 @@ variantSet1 <-opt$variantSet1
 variantSet2 <-opt$variantSet2
 label<-ifelse(opt$label == "", opt$label, paste0(opt$label, "_"))
 covariates <- strsplit(opt$covarColList,",")[[1]]
-title = paste0(label, pheno)
+title = paste0(label, phenotype)
 ## Read in first file
 d<-fread(fileList, header = F)
 
