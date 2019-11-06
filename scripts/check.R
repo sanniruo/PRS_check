@@ -70,7 +70,7 @@ for(i in 1:nrow(d)){
 causals<-c()
 for(i in 1:nrow(d)){
   data2<-fread(d$V2[i])
-  causal_new<-ifelse(grepl("inf", d$V2[i]), gsub(".*-\\s*|.txt.*", "", d$V2[i]), gsub(".*p\\s*|.txt.*", "", d$V2[i]))
+  causal_new<-ifelse(grepl("-inf", d$V2[i]), gsub(".*-\\s*|.txt.*", "", d$V2[i]), gsub(".*p\\s*|.txt.*", "", d$V2[i]))
   causals<-cbind(causals, c(causal_new))
   causal_new<-as.numeric(causal_new)
   cmd = paste0("data2$varset2_GRS_p",causal_new,"<-data2$SCORE1_AVG*data2$NMISS_ALLELE_CT")
@@ -160,4 +160,3 @@ if(phenotype%in%names(pheno)){
   dev.off()
   
 }
-
