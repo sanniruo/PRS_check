@@ -107,12 +107,6 @@ for(i in 1:length(caus_numr)){
   correlations[i]<-corr
 }
 
-cmd = paste0("pdf('",output,"/Correlation_vs_causal_fractions_",label,"",phenotype,".pdf', 10, 10)")
-eval(parse(text=cmd))
-plot(1:length(caus_numr), correlations, ylab = "Correlation", xlab = "Causal fraction", main = title, type = "b", xaxt = 'n')
-axis(at= 1:length(caus_numr), side = 1, labels =caus_numr)
-dev.off()
-
 ## Calculate auc:
 ## Read in phenotype file:
 cmd = paste0("pheno<-fread('zcat ",phenoFile,"')")
@@ -149,14 +143,24 @@ if(phenotype%in%names(pheno)){
   auc_plot_max<-max(auc_baseline, aucs_variantset1, aucs_variantset2)
   
   ## AUC plot
-  cmd = paste0("pdf('",output,"/AUC_plot_",label,"",phenotype,".pdf', 12, 10)")
+  cmd = paste0("pdf('",output,"/AUC_and_correlation_plot_",label,"",phenotype,".pdf', 24, 10)")
   eval(parse(text=cmd))
+  par(mfrow=c(1,2))
   plot(aucs_variantset1, type = "b", ylim = c(auc_plot_min-0.01*auc_plot_min, auc_plot_max+0.01*auc_plot_max), xaxt = "n", main = title, xlab = "Causal fraction", ylab = "Are Under Curve (AUC)", col = "cornflowerblue", lwd = 2)
   lines(aucs_variantset2, type = "b", col = "tomato", lwd = 2)
   abline(h = auc_baseline, col = "red", lty = 2)
   axis(1, at = 1:length(causals), labels = caus_numr)
   cmd =paste0("legend('topleft', legend = c('",variantSet1,"', '",variantSet2,"'), col = c('cornflowerblue', 'tomato'), lty = 1, lwd = 2)")
   eval(parse(text=cmd))
+  plot(1:length(caus_numr), correlations, ylab = "Correlation", xlab = "Causal fraction", main = title, type = "b", xaxt = 'n')
+  axis(at= 1:length(caus_numr), side = 1, labels =caus_numr)
   dev.off()
   
+} else{
+  print("No phenotype found, no AUC plot.")
+  cmd = paste0("pdf('",output,"/AUC_and_correlation_plot_",label,"",phenotype,".pdf', 12, 10)")
+  eval(parse(text=cmd))
+  plot(1:length(caus_numr), correlations, ylab = "Correlation", xlab = "Causal fraction", main = title, type = "b", xaxt = 'n')
+  axis(at= 1:length(caus_numr), side = 1, labels =caus_numr)
+  dev.off()
 }
