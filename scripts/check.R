@@ -164,4 +164,3 @@ if(phenotype%in%names(pheno)){
   axis(at= 1:length(caus_numr), side = 1, labels =caus_numr)
   dev.off()
 }
-
