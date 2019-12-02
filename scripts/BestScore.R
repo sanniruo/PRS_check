@@ -89,11 +89,13 @@ if(phenotype%in%names(pheno)){
     aucs[i]<-auc(logit)
   }
 }
+
 max_index<-which(aucs==max(aucs))
 max_file<-d$V1[max_index]
 max_causal<-causals[max_index]
 cmd=paste0("write.table(max_causal, '",output,"/Max_causal_fraction_",label,"",phenotype,".txt', row.names = F, col.names = F, quote = F)")
 eval(parse(text=cmd))
 max_score<-fread(max_file)
-cmd = paste0("cp ",max_file," ",output,"/",label,"",phenotype,"_best_score.txt")
+cmd=paste0("write.table(max_score, '",output,"/",label,"",phenotype,"_best_score.txt', row.names = F, quote = F)")
+eval(parse(text=cmd))
 system(cmd)
