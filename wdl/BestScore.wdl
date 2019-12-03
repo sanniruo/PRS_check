@@ -43,7 +43,7 @@ task check {
 	}
 
 	output {
-		Array[File] out_files=glob("/cromwell_root/")
+		Array[File] out_files=glob("/cromwell_root/*")
 	}
 
 	runtime{
