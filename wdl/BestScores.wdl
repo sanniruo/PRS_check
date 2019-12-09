@@ -31,7 +31,7 @@ task check {
 	Int score_size = ceil(size(score_list[0][0],"GB"))*10
 
 	Int disk_size = pheno_size + score_size +1
-
+	String out_file = study + "_" + pheno + "_bestPRS.txt"
 	command {
 		Rscript /scripts/BestScores.R \
 		--fileList=${write_tsv(score_list)} \
@@ -40,12 +40,16 @@ task check {
 		--output /cromwell_root/ \
 		--covarColList=${covarlist} \
 		--label=${study}
+
+		cp <(cut -f 1 -d " " AUCS_ordered_${study}_${pheno}.txt | grep -v baseline | head -n 1) ${out_file}
 	}
 
 	output {
         File aucs = "AUCS_ordered_${study}_${pheno}.txt"
         File correlation = "Correlations_${study}_${pheno}.txt"
+        File score = out_file
     }
+
 
 	runtime{
 		docker:"${docker}"
