@@ -1,8 +1,0 @@
-{
-
-"prs_check.prs_data":"gs://r4_data_west1/prs/check/prs_data.tsv",
-"prs_check.docker": "eu.gcr.io/finngen-refinery-dev/check_prs:test",
-  "prs_check.check.score_root":"gs://r4_data_west1/prs/check/score_lists/STUDY_PHENO_hm3_scores.txt",
-  "prs_check.check.covarlist": "SEX_IMPUTED,AGE_AT_DEATH_OR_NOW,PC1,PC2,PC3,PC4,PC5,PC6,PC7,PC8,PC9,PC10",
-  "prs_check.check.phenofile": "gs://r4_data/pheno/R4_COV_PHENO_V1.txt.gz",
-}
