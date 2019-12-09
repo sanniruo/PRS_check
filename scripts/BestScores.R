@@ -95,6 +95,10 @@ if(phenotype%in%names(pheno)){
   eval(parse(text=cmd))
   
   correlations<-cor(dat[2:(nrow(d)+1)])
+  length_names<-length(unlist(strsplit(d$V1[1], "/")))
+  names=unlist(strsplit(d$V1, "/"))[seq(length_names, length_names*nrow(d), by = length_names)]
+  rownames(correlations)<-names
+  colnames(correlations)<-names
   cmd=paste0("write.table(round(correlations, 2), '",output,"/Correlations_",label,"",phenotype,".txt', quote = F)")
   eval(parse(text=cmd))
   
