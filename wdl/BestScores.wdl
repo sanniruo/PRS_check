@@ -43,8 +43,9 @@ task check {
 	}
 
 	output {
-		Array[File] out_files=glob("/cromwell_root/*txt")
-	}
+        File aucs = "${study}_${pheno}_aucs.txt"
+        File correlation = "${study}_${pheno}_correlations.txt"
+    }
 
 	runtime{
 		docker:"${docker}"
