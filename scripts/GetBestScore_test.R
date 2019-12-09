@@ -48,17 +48,52 @@ title = paste0(label, phenotype)
 ## Read in first file
 d<-fread(fileList, header = F)
 
-causals<-c()
 for(i in 1:nrow(d)){
   data<-fread(d$V1[i])
-  causal_new<-ifelse(grepl("-inf", d$V1[i]), gsub(".*-\\s*|.txt.*", "", d$V1[i]), gsub(".*p\\s*|.txt.*", "", d$V1[i]))
-  causals<-cbind(causals, c(causal_new))
-  causal_new<-as.numeric(causal_new)
-  cmd = paste0("data$GRS_p",causal_new,"<-data$SCORE1_AVG*data$NMISS_ALLELE_CT")
+  cmd = paste0("data$PRS_",i,"<-data$SCORE1_AVG*data$NMISS_ALLELE_CT")
   eval(parse(text=cmd))
   data<-data[,c(2,6)]
   cmd<-ifelse(i == 1, "dat<-data", "dat<-left_join(dat, data)")
   eval(parse(text=cmd))
 }
 
-print(causals)
+## Calculate auc:
+## Read in phenotype file:
+cmd = paste0("pheno<-fread('zcat ",phenoFile,"')")
+eval(parse(text=cmd))
+names(dat)[1]<-"FINNGENID"
+if(phenotype%in%names(pheno)){
+  list_of_phenotypes<-c("FINNGENID", phenotype, covariates)
+  pheno<-select(pheno, list_of_phenotypes)
+  dat<-left_join(dat, pheno)
+  
+  covariatesONE<-c()
+  for(i in 1:length(covariates)){
+    covariatesONE = paste0(covariatesONE, paste0("+",covariates[i]))
+  }
+  
+  aucs<-c()
+  for(i in 1:nrow(d)){
+    cmd = paste0("logit<-glm(",phenotype,"~PRS_",i,"+",covariatesONE,", data = dat, family = 'binomial')")
+    eval(parse(text=cmd))
+    aucs[i]<-auc(logit)
+  }
+  
+  cmd = paste0("logit_baseline<-glm(dat$",phenotype,"~",covariatesONE,", data = dat, family = 'binomial')")
+  eval(parse(text=cmd))
+  auc_baseline<-auc(logit_baseline)
+
+  aucs_all<-cbind(aucs, auc_baseline)
+  files<-cbind(d$V1, "baseline")
+  
+  aucs_ordered<-order(aucs_all)
+  m<-match(aucs_ordered, aucs_all)
+  files_ordered<-files[m]
+  
+  data_to_print<-data-frame(PRS_file=files_ordered, AUCS = aucs_ordered)
+  cmd=paste0("write.table(data_to_print, '",output,"/AUCS_ordered_",label,"",phenotype,".txt', row.names = F, col.names = F, quote = F)")
+  eval(parse(text=cmd))
+  
+} else{
+  print("No phenotype found, no AUC plot.")
+}
