@@ -43,7 +43,7 @@ task check {
 	}
 
 	output {
-        File aucs = "AUC_ordered_${study}_${pheno}.txt"
+        File aucs = "AUCS_ordered_${study}_${pheno}.txt"
         File correlation = "Correlations_${study}_${pheno}.txt"
     }
 
@@ -55,5 +55,4 @@ task check {
 		preemptible:1
 		zone:"europe-west-1b" 
 	}
-
 }

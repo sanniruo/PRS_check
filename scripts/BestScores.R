@@ -95,7 +95,7 @@ if(phenotype%in%names(pheno)){
   eval(parse(text=cmd))
   
   correlations<-cor(dat[2:(nrow(d)+1)])
-  cmd=paste0("write.table(correlations, '",output,"/Correlations_",label,"",phenotype,".txt', quote = F)")
+  cmd=paste0("write.table(round(correlations, 2), '",output,"/Correlations_",label,"",phenotype,".txt', quote = F)")
   eval(parse(text=cmd))
   
 } else{
