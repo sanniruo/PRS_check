@@ -43,8 +43,8 @@ task check {
 	}
 
 	output {
-        File aucs = "${study}_${pheno}_aucs.txt"
-        File correlation = "${study}_${pheno}_correlations.txt"
+        File aucs = "AUC_ordered_${study}_${pheno}.txt"
+        File correlation = "Correlations_${study}_${pheno}.txt"
     }
 
 	runtime{
