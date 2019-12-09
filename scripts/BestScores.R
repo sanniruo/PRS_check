@@ -33,7 +33,7 @@ strsplits <- function(x, splits, ...)
   {
     x <- unlist(strsplit(x, split, ...))
   }
-  return(x[!x == ""]) # Remove empty values
+  return(x[!x == ""]) # Remove empty valuesssss
 }
 
 ## Input variables

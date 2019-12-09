@@ -41,7 +41,7 @@ task check {
 		--covarColList=${covarlist} \
 		--label=${study}
 
-		cp <(cut -f 1 -d " " AUCS_ordered_${study}_${pheno}.txt | grep -v baseline | head -n 1) ${out_file}
+		cut -f 1 -d " " AUCS_ordered_${study}_${pheno}.txt | grep -v baseline | head -n 1 | xargs -I {} cp {} ${out_file}
 	}
 
 	output {
