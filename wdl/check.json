@@ -1,7 +1,7 @@
 {
 
 "prs_check.prs_data":"gs://r4_data_west1/prs/check/prs_data.tsv",
-"prs_check.docker": "eu.gcr.io/finngen-refinery-dev/check_prs:test",
+"prs_check.docker": "eu.gcr.io/finngen-refinery-dev/check_prs:r4",
  "prs_check.check.variantset2": "full",
   "prs_check.check.score_root":"gs://r4_data_west1/prs/check/score_lists/STUDY_PHENO_scores.txt",
   "prs_check.check.variantset1": "hm3",
