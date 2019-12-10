@@ -29,9 +29,9 @@ task check {
 	File scores = sub(label_root,"PHENO",pheno)
 	Array[Array[File]] score_list=read_tsv(scores)
 	Int score_size = ceil(size(score_list[0][0],"GB"))*10
-
 	Int disk_size = pheno_size + score_size +1
-	String out_file = study + "_" + pheno + "_bestPRS.txt"
+	
+	String out_file = "/cromwell_root/" + study + "_"+ pheno + "_bestPRS.txt"
 	command {
 		Rscript /scripts/BestScores.R \
 		--fileList=${write_tsv(score_list)} \
@@ -41,7 +41,7 @@ task check {
 		--covarColList=${covarlist} \
 		--label=${study}
 
-		cut -f 1 -d " " AUCS_ordered_${study}_${pheno}.txt | grep -v baseline | head -n 1 | xargs -I {} cp {} ${out_file}
+		cut -f 1 -d " " AUCS_ordered_${study}_${pheno}.txt | grep -v baseline | head -n 1 | xargs -I [] cp [] ${out_file}
 	}
 
 	output {
