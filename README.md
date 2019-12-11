@@ -4,7 +4,7 @@ Pipeline for 1) comparing two sets of variants by their prediction accuracy of t
 ## Pre-requirements
 Designed to be run with Cromwell on Google Cloud but the underlying bash/python scripts could alternatively be run on another environment. See docker/Dockerfile for list of required tools and packages if not using Docker.
 
-Latest pre-built container image: eu.gcr.io/finngen-refinery-dev/calc-prs:0.06
+Latest pre-built container image: eu.gcr.io/finngen-refinery-dev/check_prs:r4
 
 ## Check- pipeline
 ### Usage instructions
